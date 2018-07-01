@@ -69,7 +69,9 @@ export class EditorComponent implements OnInit {
   		let cursor = this.editor.getSession().getSelection().getCursor();
   		console.log('cursor moves: ' + JSON.stringify(cursor));
   		this.collaboratiion.cursorMove(JSON.stringify(cursor));
-  	})
+  	});
+
+  	this.collaboratiion.restoreBuffer();
   }
 
   setLanguage(language: string): void {
