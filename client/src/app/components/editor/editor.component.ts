@@ -18,8 +18,10 @@ export class EditorComponent implements OnInit {
 
   sessionId: string;
 
+  output: string;
+
   defaultContent = {
-    'Java': `public class Example {
+    'Java': `public class Solution {
        public static void main(String[] args) {
          // Your solution goes here
        }
@@ -36,7 +38,7 @@ export class EditorComponent implements OnInit {
 		# Your solution goes here`
   };
 
-  constructor(@Inject('collaboration') private collaboratiion, private route: ActivatedRoute) {
+  constructor(@Inject('collaboration') private collaboratiion, @Inject('data') private data, private route: ActivatedRoute) {
 
    }
 
@@ -82,10 +84,17 @@ export class EditorComponent implements OnInit {
   resetEditor(): void {
   	this.editor.getSession().setMode('ace/mode/' + this.language.toLowerCase());
   	this.editor.setValue(this.defaultContent[this.language]);
+    this.output = '';
+    
   }
 
   submit(): void {
   	let userCode = this.editor.getValue();
-  	console.log(userCode);
+    let data = {
+      user_code: userCode,
+      lang: this.language.toLowerCase()
+    };
+    this.data.buildAndRun(data)
+              .then(res => this.output = res.text);
   }
 }
